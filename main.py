@@ -84,7 +84,21 @@ def goto_end():
 def set_range(start, end):
     cm.playbackOptions(min=start, max=end)
     
+def yank_keyframes():
+    time_control = cm.lsUI(type='timeControl')[0]
+    start_frame, end_frame = cm.timeControl(time_control, q=True, rangeArray=True)    
+    end_frame -= 1
+    if start_frame == end_frame:
+        start_frame = end_frame = cm.currentTime(q=True)
 
+    cm.copyKey(time=(start_frame, end_frame))
+    print(f"Yanked keyframes within range: {start_frame} to {end_frame}")
+
+def paste_keyframes():
+    current_time = int(cm.currentTime(q=True))
+    cm.pasteKey(time = (current_time, current_time), option = "insert")
+    
+    
 #------------------------------------------------
 # UI
 #------------------------------------------------
@@ -136,6 +150,13 @@ def vit(*args):
             if not end.startswith("@"): 
                 end = int(end) + cm.playbackOptions(q=True, min=True)
             set_range(int(start), int(end))
+    elif cmd == cmd_dict["yank_cmd"]:
+        # TODO: Implement input range handling
+        yank_keyframes()
+    elif cmd == cmd_dict["paste_cmd"]:
+        # TODO: Implement input range handling
+        paste_keyframes()    
+    
     else:
         print(f"Command '{cmd}' not yet implemented")
 
