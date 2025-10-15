@@ -11,7 +11,7 @@ import maya.cmds as cm
 
 
 
-commands_dict = {
+cmd_dict = {
     "goto_cmd": "g",
     "goto_start_cmd": "gs",
     "goto_end_cmd": "ge",
@@ -21,7 +21,7 @@ commands_dict = {
     "cut_cmd": "x",
     "paste_cmd": "p",
 }
-commands_str = " ".join(commands_dict.values())
+cmd_str = " ".join(cmd_dict.values())
 
 
 #------------------------------------------------
@@ -108,18 +108,18 @@ def vit(*args):
     
     cmd = parsed.command
     
-    if cmd == "gs":
+    if cmd == cmd_dict["goto_start_cmd"]:
         goto_start()
-    elif cmd == "ge":
+    elif cmd == cmd_dict["goto_end_cmd"]:
         goto_end()
-    elif cmd == "g":
+    elif cmd == cmd_dict["goto_cmd"]:
         if parsed.args:
             if parsed.args == ".":
                 frame = cm.currentTime(q=True)
             if not parsed.args.startswith("@"):
                 frame = int(parsed.args) + cm.playbackOptions(q=True, min=True)
             goto_frame(frame)
-    elif cmd == "r":
+    elif cmd == cmd_dict["set_range_cmd"]:
         if parsed.range:
             start, end = parsed.range
             if start == ".":
@@ -135,7 +135,6 @@ def vit(*args):
                 start = int(start) + cm.playbackOptions(q=True, min=True)
             if not end.startswith("@"): 
                 end = int(end) + cm.playbackOptions(q=True, min=True)
-                
             set_range(int(start), int(end))
     else:
         print(f"Command '{cmd}' not yet implemented")
