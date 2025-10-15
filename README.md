@@ -1,8 +1,12 @@
 # Timeline Command Language
-A recreative project, to create a DSL to speed up Timeline operations in Maya. 
+A recreational project, to create a DSL to speed up Timeline operations in Maya. 
 It si inspired by modal editors like Vim, that, once learned, can speed up manipulation and navigation tremendously. 
 
 The idea is to simulating entering a "timeline mode" in Maya by pressing a shortcut. 
+
+## Tools used
+Using Python 3.11, to run in Maya 2025. For the parsing I'll use pyparsing for the moment, as it comes in with maya, and it should handle the project scope well. 
+
 
 ## Ideal behaviour
 
