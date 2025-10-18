@@ -5,21 +5,43 @@ It si inspired by modal editors like Vim, that, once learned, can speed up manip
 The idea is to simulating entering a "timeline mode" in Maya by pressing a shortcut. 
 
 ## Tools used
-Using Python 3.11, to run in Maya 2025. For the parsing I'll use pyparsing for the moment, as it comes in with maya, and it should handle the project scope well. 
-
+Using Python 3.11, to run in Maya 2025. ~~For the parsing I'll use pyparsing for the moment, as it comes in with maya, and it should handle the project scope well. ~~ Actually using regex, as it keeps the code so much more readable than pyparsing!
 
 ## Ideal behaviour
 
+### == Opt.1 ==
 On the press of a shortcut, let's say `ALT + G` you invoke a very small promptDialog (probably written in cmds to keep compatibility to a maximum, at the cost of looks fo course).
 On Pressing `ENTER` the command gets executed. Alternatively, similar to certain Vim's commands, some commands won't require pressing `ENTER` when CAPITALIZED. Obviously this behaviour will eb possible for commands that don't require an argument. 
 
-For example: `g 100` will require `ENTER` cause it needs to know to which frame to bring you, but the command `ge` (goto range end bound) can simply be entered as `Ge` and it will execute wihtout the need to press `ENTER`. Otherwise, the DSL could maybe understand that if no explicit argument is needed, then also no `ENTER` is needed, and that coudl be interesting too. 
+For example: `g 100` will require `ENTER` cause it needs to know to which frame to bring you, but the command `ge` (goto range end bound) can simply be entered as `Ge` and it will execute wihtout the need to press `ENTER`. Otherwise, the DSL could maybe understand that if no explicit argument is needed, then also no `ENTER` is needed, and that could be interesting too. 
 
 ```bash
 ┌──────────────────────────────┐
 │r 50:120                      │
 └──────────────────────────────┘
 ```
+
+### == Opt.2 ==
+
+Another option could be to implement an actual `vit mode` in Maya. 
+This can be done using [Event Filter](https://doc.qt.io/qt-6/eventsandfilters.html#event-filters).
+That could be interesting, but it's something I'll have to study a bit before trying to implement it. 
+
+And, on a second thought, the whole input system should actually be different. At the moment I'm designing vit to receive a string, and parse it, then with a switch chose the right command. 
+But in a mode system, I'd imagine the commands to be parsed 'on the fly'. 
+For example: in Blender, you press `g` to enter `grab mode` (move tool in blender lingo) then you press `5` and it'll move the object 5 units relative to the current view, then if you press `x` it'll constrain the movement to the x axys, and if you press `-` it'll adjust to a negative value. 
+
+The way I'm designing vit right now would expects to receive `gx-5` as a string and then it'll execute the command at once.  
+
+
+## Features
+
+- [x] Lex imput commands 
+- [ ] Parse Commands 
+- [ ] Maya commands
+- [ ] Maya GUI - 
+
+
 
 ## Core Concepts
 
