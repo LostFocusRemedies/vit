@@ -9,6 +9,7 @@ class COMMANDS(str, Enum):
     RANGE_EXTEND = "rr" 
     RANGE_SHRINK = "rs"
     MOVE         = "m"
+    MOVE_MORE    =  "mm"
     YANK         = "y"
     YANK_ALL     = "ya"
     YANK_NEXT    = "yn"
