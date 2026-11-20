@@ -1,15 +1,27 @@
+"""
+import vit.main_regex as vit
+from importlib import reload
+reload(vit)
+
+vit.main()
+"""
+
+
+
+
 import re
 from enum import Enum
+import .operators as operators
 
 class COMMANDS(str, Enum):
     GOTO         = "g"
-    GOTO_START   = "gs" 
+    GOTO_START   = "gs"
     GOTO_END     = "ge"
     RANGE_SET    = "r"
-    RANGE_EXTEND = "rr" 
+    RANGE_EXTEND = "rr"
     RANGE_SHRINK = "rs"
     MOVE         = "m"
-    MOVE_MORE    =  "mm"
+    MOVE_MORE    = "mm"
     YANK         = "y"
     YANK_ALL     = "ya"
     YANK_NEXT    = "yn"
@@ -41,7 +53,7 @@ GRAMMAR_PATTERN = rf"^(?P<cmd>{COMMAND})?(?:\s*(?P<arg>(?:{RANGE})|(?:{FRAME})))
 
 
 
-def main():
+def test():
     vit_pattern = re.compile(GRAMMAR_PATTERN)
 
     test_commands = [
@@ -49,7 +61,7 @@ def main():
         "gs",
         "ge",
         "r@5:@15",
-        "m-3",        
+        "m-3",
         "mm",
         "y",
         "x @12:@18",
@@ -58,7 +70,7 @@ def main():
         "100",        # Implicit goto
         "10:20",      # Implicit range
     ]
-    
+
     for cmd in test_commands:
         match = vit_pattern.match(cmd)
         if not match:
@@ -74,6 +86,28 @@ def main():
                 match_dict["cmd"] = COMMANDS.GOTO.value
 
         print(f"{cmd:15} => cmd:'{match_dict['cmd']}' arg: '{match_dict['arg']}'")
+
+
+
+
+def run_command(cmd:str):
+    vit_pattern = re.compile(GRAMMAR_PATTERN)
+
+    match = vit_pattern.match(cmd)
+    if not match:
+        print(f"Invalid command: {cmd}")
+        return
+
+    match_dict = match.groupdict()
+
+    if not match_dict["cmd"] and match_dict["arg"]:
+        if ":" in match_dict["arg"] or ";" in match_dict["arg"]:
+            match_dict["cmd"] = COMMANDS.RANGE_SET.value
+        else:
+            match_dict["cmd"] = COMMANDS.GOTO.value
+
+    print(match_dict["cmd"])
+    print(match_dict["arg"])
 
 
 
